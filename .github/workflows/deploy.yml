@@ -45,7 +45,7 @@ jobs:
           mkdir -p ~/deploy
 
           # Unzip into web root
-          sudo unzip -o ~/deploy/site.zip -d /var/www/cicd-githubactions.binadam.net
+          sudo unzip -o /home/ubuntu/deploy/github/workspace/site.zip -d /var/www/cicd-githubactions.binadam.net
 
           # Fix permissions
           sudo chown -R www-data:www-data /var/www/cicd-githubactions.binadam.net
