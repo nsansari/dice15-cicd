@@ -2,7 +2,8 @@ name: Deploy to EC2
 
 on:
   push:
-    branches: [ "main" ]
+    branches:
+      - main
 
 jobs:
   deploy:
@@ -17,14 +18,14 @@ jobs:
         cd $GITHUB_WORKSPACE
         zip -r site.zip . -x "*.git*"
 
-    - name: Copy files to EC2
+    - name: Upload site.zip to EC2
       uses: appleboy/scp-action@v0.1.7
       with:
         host: 3.8.163.147
         username: ubuntu
         key: ${{ secrets.EC2_SSH_KEY }}
         source: "${{ github.workspace }}/site.zip"
-        target: "~/"
+        target: "~/deploy"
         debug: true
 
     - name: Deploy on EC2
@@ -34,30 +35,22 @@ jobs:
         username: ubuntu
         key: ${{ secrets.EC2_SSH_KEY }}
         script: |
-          sudo apt update -y
-          sudo apt install nginx -y
+          set -e
 
+          # Ensure unzip exists
+          sudo apt update -y
           sudo apt install unzip -y
 
-          sudo mkdir -p /var/www/cicd-githubactions.binadam.net
-          sudo unzip -o /home/ubuntu/github/workspace/site.zip -d /var/www/cicd-githubactions.binadam.net
+          # Ensure deploy folder exists
+          mkdir -p ~/deploy
 
+          # Unzip into web root
+          sudo unzip -o ~/deploy/site.zip -d /var/www/cicd-githubactions.binadam.net
+
+          # Fix permissions
           sudo chown -R www-data:www-data /var/www/cicd-githubactions.binadam.net
+          sudo chmod -R 755 /var/www/cicd-githubactions.binadam.net
 
-          sudo tee /etc/nginx/sites-available/cicd-githubactions.binadam.net > /dev/null <<EOF
-          server {
-              listen 80;
-              server_name cicd-githubactions.binadam.net;
-
-              root /var/www/cicd-githubactions.binadam.net;
-              index index.html;
-
-              location / {
-                  try_files \$uri \$uri/ =404;
-              }
-          }
-          EOF
-
-          sudo ln -sf /etc/nginx/sites-available/cicd-githubactions.binadam.net /etc/nginx/sites-enabled/
+          # Reload nginx safely
           sudo nginx -t
-          sudo systemctl restart nginx
+          sudo systemctl reload nginx
