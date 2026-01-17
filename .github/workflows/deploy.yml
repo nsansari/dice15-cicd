@@ -21,7 +21,7 @@ jobs:
         host: 3.8.163.147
         username: ubuntu
         key: ${{ secrets.EC2_SSH_KEY }}
-        source: "site.zip"
+        source: "/home/runner/work/${{ github.repository }}/site.zip"
         target: "~/"
 
     - name: Deploy on EC2
