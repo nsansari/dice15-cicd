@@ -34,17 +34,17 @@ jobs:
           sudo apt update -y
           sudo apt install nginx -y
 
-          sudo mkdir -p /var/www/ci-cd.dice15.online
-          sudo unzip -o ~/site.zip -d /var/www/ci-cd.dice15.online
+          sudo mkdir -p /var/www/cicd-githubactions.binadam.net
+          sudo unzip -o ~/site.zip -d /var/www/cicd-githubactions.binadam.net
 
-          sudo chown -R www-data:www-data /var/www/ci-cd.dice15.online
+          sudo chown -R www-data:www-data /var/www/cicd-githubactions.binadam.net
 
-          sudo tee /etc/nginx/sites-available/ci-cd.dice15.online > /dev/null <<EOF
+          sudo tee /etc/nginx/sites-available/cicd-githubactions.binadam.net > /dev/null <<EOF
           server {
               listen 80;
-              server_name ci-cd.dice15.online;
+              server_name cicd-githubactions.binadam.net;
 
-              root /var/www/ci-cd.dice15.online;
+              root /var/www/cicd-githubactions.binadam.net;
               index index.html;
 
               location / {
@@ -53,6 +53,6 @@ jobs:
           }
           EOF
 
-          sudo ln -sf /etc/nginx/sites-available/ci-cd.dice15.online /etc/nginx/sites-enabled/
+          sudo ln -sf /etc/nginx/sites-available/cicd-githubactions.binadam.net /etc/nginx/sites-enabled/
           sudo nginx -t
           sudo systemctl restart nginx
