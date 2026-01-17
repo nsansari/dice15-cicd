@@ -36,6 +36,9 @@ jobs:
         key: ${{ secrets.EC2_SSH_KEY }}
         script: |
           set -e
+          sudo apt update -y
+          sudo apt install nginx -y
+          set -e
 
           # Ensure unzip exists
           sudo apt update -y
