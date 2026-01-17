@@ -37,6 +37,8 @@ jobs:
           sudo apt update -y
           sudo apt install nginx -y
 
+          sudo apt install unzip -y
+
           sudo mkdir -p /var/www/cicd-githubactions.binadam.net
           sudo unzip -o /home/ubuntu/github/workspace/site.zip -d /var/www/cicd-githubactions.binadam.net
 
