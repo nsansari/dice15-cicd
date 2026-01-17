@@ -38,7 +38,7 @@ jobs:
           sudo apt install nginx -y
 
           sudo mkdir -p /var/www/cicd-githubactions.binadam.net
-          sudo unzip -o ~/site.zip -d /var/www/cicd-githubactions.binadam.net
+          sudo unzip -o ~/github/site.zip -d /var/www/cicd-githubactions.binadam.net
 
           sudo chown -R www-data:www-data /var/www/cicd-githubactions.binadam.net
 
